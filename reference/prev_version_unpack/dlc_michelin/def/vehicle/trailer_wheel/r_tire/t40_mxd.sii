@@ -1,0 +1,20 @@
+SiiNunit
+{
+accessory_wheel_data : t40_mxd.rtire
+{
+	name: "@@rtire_315_70_michelin_x_multiway_3d_xde@@"
+	price: 4620
+	unlock: 0
+	icon: "315-70_michelin_xze.dlc_michelin"
+	part_type: licensed
+
+	model: "/vehicle/truck/upgrade/wheel/tire/r_315-70_michelin.pmd"
+	look: mich_xde
+
+	roll_resistance: 6.5
+	wet_grip: 1.0
+	noise_volume: 75.0
+
+	paintable: true
+}
+}

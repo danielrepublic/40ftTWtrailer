@@ -1,0 +1,16 @@
+SiiNunit
+{
+accessory_trailer_data : vehicle.tw40ch.container40
+{
+    info[]: "tw40ch"                   # brand
+    info[]: "@@series_scs_container@@" # series/type
+
+	fallback[]: "r_tire|t40_trm.sii"
+	fallback[]: "r_disc|t40_d01g.sii"
+	fallback[]: "r_hub|t40_h01.sii"
+	fallback[]: "r_nuts|t40_n01s.sii"
+    fallback[]: "paint_job|red.sii"
+
+    require[]: chassis
+}
+}

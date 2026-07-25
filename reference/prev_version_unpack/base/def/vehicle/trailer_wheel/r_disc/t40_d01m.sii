@@ -1,0 +1,14 @@
+SiiNunit
+{
+accessory_rim_data : t40_d01m.rdisc
+{
+	name: "@@rdisc_standard@@"
+	price: 4800
+	unlock: 0
+	model: "/vehicle/truck/upgrade/wheel/disc/rear_disc_01_matt_gray.pmd"
+	icon: "disc/rear_disc_01_matt_gray"
+	part_type: aftermarket
+
+	tire_shift: -0.01
+}
+}

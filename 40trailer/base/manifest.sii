@@ -1,0 +1,17 @@
+SiiNunit
+{
+mod_package : .package_name
+{
+    package_version: "0.1.1"
+    display_name: "台式 40 呎貨櫃版台"
+    author: "Daniel"
+
+    category[]: "trailer"
+    category[]: "models"
+
+    description_file: "mod_description.txt"
+    icon: "mod_icon.jpg"
+    compatible_versions[]: "1.60.*"
+
+}
+}

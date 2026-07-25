@@ -1,0 +1,81 @@
+trailer : trailer.tw40ch_40
+{
+	trailer_definition: trailer_def.tw40ch.container40.single_2_40.container
+
+	accessories[]: tw40ch_40.tchassis
+	accessories[]: tw40ch_40.trwheel0
+	accessories[]: tw40ch_40.trwheel0_d
+	accessories[]: tw40ch_40.trwheel0_h
+	accessories[]: tw40ch_40.trwheel0_n
+	accessories[]: tw40ch_40.trwheel1
+	accessories[]: tw40ch_40.trwheel1_d
+	accessories[]: tw40ch_40.trwheel1_h
+	accessories[]: tw40ch_40.trwheel1_n
+	accessories[]: tw40ch_40.paint_job
+	accessories[]: tw40ch_40.body
+	}
+
+vehicle_accessory: tw40ch_40.tchassis
+{
+	data_path: "/def/vehicle/trailer/tw40ch_40_chassis.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel0
+{
+	offset: 0
+	data_path: "/def/vehicle/trailer_wheel/r_tire/t40_trm.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel0_d
+{
+	offset: 0
+	data_path: "/def/vehicle/trailer_wheel/r_disc/t40_d01g.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel0_h
+{
+	offset: 0
+	data_path: "/def/vehicle/trailer_wheel/r_hub/t40_h01.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel0_n
+{
+	offset: 0
+	data_path: "/def/vehicle/trailer_wheel/r_nuts/t40_n01s.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel1
+{
+	offset: 2
+	data_path: "/def/vehicle/trailer_wheel/r_tire/t40_trm.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel1_d
+{
+	offset: 2
+	data_path: "/def/vehicle/trailer_wheel/r_disc/t40_d01g.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel1_h
+{
+	offset: 2
+	data_path: "/def/vehicle/trailer_wheel/r_hub/t40_h01.sii"
+}
+
+vehicle_wheel_accessory: tw40ch_40.trwheel1_n
+{
+	offset: 2
+	data_path: "/def/vehicle/trailer_wheel/r_nuts/t40_n01s.sii"
+}
+
+vehicle_paint_job_accessory: tw40ch_40.paint_job
+{
+	data_path: "/def/vehicle/trailer/tw40ch_40_paint_job.sii"
+}
+
+vehicle_accessory: tw40ch_40.body
+{
+	data_path: "/def/vehicle/trailer/tw40ch_40_body.sii"
+}
+
+

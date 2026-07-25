@@ -1,0 +1,11 @@
+SiiNunit
+{
+accessory_addon_data : stock.tw40ch.container40.r_mudflap
+{
+    name: "台式泥除"
+    price: 100
+    unlock: 0
+    icon: "body/tw_container/body"
+    exterior_model: "/vehicle/trailer_owned/upgrade/r_mudflap/container.pmd"
+}
+}

@@ -1,0 +1,14 @@
+SiiNunit
+{
+accessory_addon_data : container.tw40ch.container40.rlights
+{
+    name: "尾燈"
+    price: 100
+    unlock: 0
+    icon: "body/tw_container/body"
+
+    suitable_for[]: "ch40.tw40ch.container40.chassis"
+
+    exterior_model: "/vehicle/trailer_owned/upgrade/rlights/container.pmd"
+}
+}

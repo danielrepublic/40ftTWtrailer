@@ -1,0 +1,18 @@
+SiiNunit
+{
+accessory_wheel_data : t40_trm.rtire
+{
+	name: "@@rtire_315_70_trailmaster@@"
+	price: 3640
+	unlock: 0
+	icon: "f_tire_01"
+	part_type: aftermarket
+
+	model: "/vehicle/truck/upgrade/wheel/tire/rear_1.pmd"
+	look: trailmaster
+
+	roll_resistance: 7.5
+	wet_grip: 0.9
+	noise_volume: 76
+}
+}

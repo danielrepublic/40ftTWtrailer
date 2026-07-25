@@ -1,0 +1,18 @@
+SiiNunit
+{
+accessory_wheel_data : t40_wrkm.rtire
+{
+	name: "315/60 Goodyear KMAX D Gen2"
+	price: 4280
+	unlock: 0
+	icon: "good_small"
+	model: "/vehicle/truck/upgrade/wheel/tire/r_315-60_goodyear.pmd"
+	look: kmax
+
+	roll_resistance: 5.5
+	wet_grip: 1.15
+	noise_volume: 72
+
+	paintable: true
+}
+}

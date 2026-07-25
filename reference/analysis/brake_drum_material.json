@@ -1,0 +1,363 @@
+{
+  "name": "mat_0004_plastic_glossy",
+  "diffuse_color": [
+    0.800000011920929,
+    0.800000011920929,
+    0.800000011920929,
+    1.0
+  ],
+  "metallic": 0.0,
+  "roughness": 0.4000000059604645,
+  "nodes": [
+    {
+      "name": "VColorGroup",
+      "type": "GROUP",
+      "location": [
+        -185.0,
+        1650.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "FirstUVs",
+      "type": "UVMAP",
+      "location": [
+        -185.0,
+        1500.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "Geometry",
+      "type": "NEW_GEOMETRY",
+      "location": [
+        -185.0,
+        1350.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "DiffuseColor",
+      "type": "RGB",
+      "location": [
+        185.0,
+        1700.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "SpecularColor",
+      "type": "RGB",
+      "location": [
+        185.0,
+        1900.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "VertexColorScale",
+      "type": "VECT_MATH",
+      "location": [
+        555.0,
+        1550.0
+      ],
+      "inputs": {
+        "Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "OpacityMultiplier",
+      "type": "MATH",
+      "location": [
+        555.0,
+        1300.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "BaseTex",
+      "type": "TEX_IMAGE",
+      "location": [
+        185.0,
+        1500.0
+      ],
+      "inputs": {
+        "Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "VertexColorMultiplier",
+      "type": "VECT_MATH",
+      "location": [
+        740.0,
+        1500.0
+      ],
+      "inputs": {
+        "Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "DiffMultiplier",
+      "type": "VECT_MATH",
+      "location": [
+        925.0,
+        1650.0
+      ],
+      "inputs": {
+        "Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "LightingEvaluator",
+      "type": "GROUP",
+      "location": [
+        1295.0,
+        1800.0
+      ],
+      "inputs": {
+        "Normal Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "Incoming Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "ComposeLighting",
+      "type": "GROUP",
+      "location": [
+        1480.0,
+        2000.0
+      ],
+      "inputs": {
+        "Diffuse Color": {
+          "type": "RGBA",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Specular Color": {
+          "type": "RGBA",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Env Color": {
+          "type": "RGBA",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Diffuse Lighting": {
+          "type": "RGBA",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Specular Lighting": {
+          "type": "RGBA",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "Output",
+      "type": "OUTPUT_MATERIAL",
+      "location": [
+        1665.0,
+        1800.0
+      ],
+      "inputs": {
+        "Surface": {
+          "type": "SHADER",
+          "default_value": null
+        },
+        "Volume": {
+          "type": "SHADER",
+          "default_value": null
+        },
+        "Displacement": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "SpecMultiplier",
+      "type": "VECT_MATH",
+      "location": [
+        555.0,
+        1900.0
+      ],
+      "inputs": {
+        "Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "RemapAlphaToWeight",
+      "type": "GROUP",
+      "location": [
+        370.0,
+        1900.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "TSNMap Flavor",
+      "type": "FRAME",
+      "location": [
+        0.0,
+        0.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "NormalMapUVs",
+      "type": "UVMAP",
+      "location": [
+        555.0,
+        950.0
+      ],
+      "inputs": {}
+    },
+    {
+      "name": "NMapTex",
+      "type": "TEX_IMAGE",
+      "location": [
+        740.0,
+        950.0
+      ],
+      "inputs": {
+        "Vector": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "NormalMap",
+      "type": "NORMAL_MAP",
+      "location": [
+        925.0,
+        750.0
+      ],
+      "inputs": {
+        "Color": {
+          "type": "RGBA",
+          "default_value": [
+            0.5,
+            0.5,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "name": "NMapScaleGroup",
+      "type": "GROUP",
+      "location": [
+        1110.0,
+        950.0
+      ],
+      "inputs": {
+        "NMap Tex Color": {
+          "type": "RGBA",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Original Normal": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "Modified Normal": {
+          "type": "VECTOR",
+          "default_value": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  ]
+}

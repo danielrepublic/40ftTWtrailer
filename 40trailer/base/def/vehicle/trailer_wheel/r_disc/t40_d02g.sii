@@ -1,0 +1,14 @@
+SiiNunit
+{
+accessory_rim_data : t40_d02g.rdisc
+{
+	name: "@@rdisc_dark_silver@@"
+	price: 6525
+	unlock: 7
+	model: "/vehicle/truck/upgrade/wheel/disc/rear_disc_02.pmd"
+	icon: "disc/rear_disc_02"
+	part_type: aftermarket
+
+	tire_shift: -0.01
+}
+}

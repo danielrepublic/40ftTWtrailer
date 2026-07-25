@@ -1,0 +1,13 @@
+effect : "eut2.dif.spec.rfx" {
+	additional_ambient : 0.000000
+	diffuse : { 0.001935 , 0.001935 , 0.001935 }
+	reflection : 0.000000
+	shininess : 30.000000
+	specular : { 0.013412 , 0.013412 , 0.013412 }
+	texture : "texture_base" {
+		source : "/vehicle/trailer_owned/tw_container/plastic_glossy.tobj"
+		min_filter : linear
+		mag_filter : linear
+		mip_filter : linear
+	}
+}

@@ -1,0 +1,5 @@
+build/*
+dist/*.scs
+source/blender/*.blend1
+source/blender/*.blend2
+source/textures/*.tmp

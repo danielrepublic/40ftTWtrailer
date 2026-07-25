@@ -1,0 +1,5 @@
+map	2d	2.dds
+addr	repeat	repeat
+trilinear
+color_space	srgb
+usage	default

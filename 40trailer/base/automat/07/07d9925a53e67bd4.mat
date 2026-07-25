@@ -1,0 +1,16 @@
+effect : "eut2.lamp.rfx" {
+	additional_ambient : 0.000000
+	diffuse : { 1.000000 , 1.000000 , 1.000000 }
+	shininess : 90.000000
+	specular : { 0.447988 , 0.447988 , 0.447988 }
+	texture : "texture_base" {
+		source : "/vehicle/trailer_owned/upgrade/rlights/light.tobj"
+		u_address : clamp
+		v_address : clamp
+	}
+	texture : "texture_mask" {
+		source : "/vehicle/trailer_owned/upgrade/rlights/light_mask.tobj"
+		u_address : clamp
+		v_address : clamp
+	}
+}

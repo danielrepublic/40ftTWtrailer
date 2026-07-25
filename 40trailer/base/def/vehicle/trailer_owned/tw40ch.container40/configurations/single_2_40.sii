@@ -1,0 +1,10 @@
+SiiNunit
+{
+trailer_configuration : .single_2_40
+{
+    name: "台式 40 呎雙軸"
+    chain_type: single
+    icon: "body/tw_container/body"
+    chassis[]: "/def/vehicle/trailer_owned/tw40ch.container40/chassis/ch_40.sii"
+}
+}

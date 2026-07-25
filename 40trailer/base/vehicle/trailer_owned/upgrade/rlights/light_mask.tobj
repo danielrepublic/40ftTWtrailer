@@ -1,0 +1,5 @@
+map	2d	light_mask.dds
+addr	repeat	repeat
+trilinear
+color_space	linear
+usage	default

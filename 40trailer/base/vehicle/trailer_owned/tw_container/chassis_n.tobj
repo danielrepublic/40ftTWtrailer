@@ -1,0 +1,5 @@
+map	2d	chassis_n.dds
+addr	repeat	repeat
+trilinear
+color_space	linear
+usage	tsnormal

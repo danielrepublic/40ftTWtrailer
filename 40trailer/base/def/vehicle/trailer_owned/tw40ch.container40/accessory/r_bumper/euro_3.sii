@@ -1,0 +1,14 @@
+SiiNunit
+{
+accessory_addon_data : euro_3.tw40ch.container40.r_bumper
+{
+	name: "@@bumper_standard@@"
+	price: 440
+	unlock: 0
+	icon: "r_bumper/scs_gooseneck/euro_3"
+
+	exterior_model: "/vehicle/trailer_owned/scs_gooseneck/accessory/r_bumper/euro_3.pmd"
+
+	suitable_for[]: "ch40.tw40ch.container40.chassis"
+}
+}

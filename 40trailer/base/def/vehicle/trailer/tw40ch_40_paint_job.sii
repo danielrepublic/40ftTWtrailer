@@ -1,0 +1,13 @@
+SiiNunit
+{
+accessory_paint_job_data : tw40ch_40.paint_job
+{
+	name: "素模深紅"
+	price: 1000
+	unlock: 0
+	part_type: factory
+	base_color: (0.2925, 0.0068, 0.0205)
+	base_color_locked: true
+	stock: true
+}
+}

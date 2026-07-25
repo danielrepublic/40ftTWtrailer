@@ -1,0 +1,28 @@
+# Build outputs
+40trailer/build/
+40trailer/dist/
+
+# Tools (downloaded binaries)
+tools/downloads/
+tools/scs_extractor_1_55/
+tools/conversion_tools_2_21/
+
+# Blender temp files
+*.blend1
+*.blend2
+
+# SCS mid-format exports
+*.pim
+*.pit
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+*.log
+
+# Reference extracted mod data (large binary assets)
+reference/20ft_unpack/
+reference/mod_extractions/

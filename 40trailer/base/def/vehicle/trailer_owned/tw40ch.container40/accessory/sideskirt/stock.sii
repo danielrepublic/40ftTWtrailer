@@ -1,0 +1,14 @@
+SiiNunit
+{
+accessory_addon_data : stock.tw40ch.container40.sideskirt
+{
+    name: "側邊配件架構"
+    price: 100
+    unlock: 0
+    icon: "body/tw_container/body"
+
+    suitable_for[]: "ch40.tw40ch.container40.chassis"
+
+    exterior_model: "/vehicle/trailer_owned/upgrade/sideskirt/stock.pmd"
+}
+}

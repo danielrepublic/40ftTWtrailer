@@ -1,0 +1,5 @@
+material : "ui"
+{
+	texture : "tw40ch_container40.tobj"
+	texture_name : "texture"
+}

@@ -1,0 +1,16 @@
+SiiNunit
+{
+accessory_addon_data : white.tw40ch.container40.reflective
+{
+	name: "反光條 - 白"
+	price: 10
+	unlock: 1
+	icon: "body/tw_container/body"
+
+	suitable_for[]: "ch40.tw40ch.container40.chassis"
+
+	exterior_model: "/vehicle/trailer_owned/upgrade/reflective/dirt.pmd"
+	look: white
+
+}
+}

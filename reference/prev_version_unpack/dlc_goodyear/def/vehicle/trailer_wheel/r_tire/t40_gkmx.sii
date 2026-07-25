@@ -1,0 +1,20 @@
+SiiNunit
+{
+accessory_wheel_data : t40_gkmx.rtire
+{
+	name: "@@rtire_315_70_goodyear_kmax_d_gen2@@"
+	price: 4680
+	unlock: 0
+	icon: "r315-70_goodyear_kmax"
+	part_type: licensed
+
+	model: "/vehicle/truck/upgrade/wheel/tire/r_315-70_goodyear.pmd"
+	look: kmax
+
+	roll_resistance: 5.5
+	wet_grip: 1.15
+	noise_volume: 72.0
+
+	paintable: true
+}
+}
