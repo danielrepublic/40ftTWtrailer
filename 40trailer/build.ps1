@@ -227,6 +227,10 @@ function Assert-ExportContract {
         if ($texts.PIT -notmatch [regex]::Escape('Effect: "' + $effect + '"')) { throw "PIT is missing $effect." }
     }
     if ($texts.PIT -notmatch [regex]::Escape('Value: "/material/environment/vehicle_reflection"')) { throw "PIT is missing vehicle_reflection." }
+    $pieceCount = ([regex]::Matches($texts.PIM, '(?m)^Piece \{')).Count
+    $positionStreamCount = ([regex]::Matches($texts.PIM, 'Tag: "_POSITION"')).Count
+    $uvStreamCount = ([regex]::Matches($texts.PIM, 'Tag: "_UV0"')).Count
+    if ($pieceCount -eq 0 -or $positionStreamCount -ne $pieceCount -or $uvStreamCount -ne $pieceCount) { throw "Every PIM piece must contain POSITION and UV0 vertex streams." }
     if (([regex]::Matches($texts.PIC, 'Type: "Cylinder"')).Count -ne 1 -or ([regex]::Matches($texts.PIC, 'Type: "Box"')).Count -ne 6) { throw "PIC must contain one Cylinder and six Box collision locators." }
     if ($texts.PIC -notmatch '(?s)Part \{\s+Name: "defaultpart"\s+PieceCount: 0\s+LocatorCount: 7') { throw "PIC collision locators must belong to defaultpart." }
 }
