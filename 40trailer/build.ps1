@@ -85,6 +85,11 @@ $ConditionalFiles = @{
         "def\vehicle\trailer_wheel\r_nuts\t40_n05p.sii"
     )
 }
+$LegacyRuntimeModels = @(
+    "vehicle\trailer_owned\upgrade\rlights\container.pmd",
+    "vehicle\trailer_owned\upgrade\r_mudflap\container.pmd",
+    "vehicle\trailer_owned\upgrade\r_mudflap\container.pmg"
+)
 
 function Assert-ManagedPath {
     param([string]$Path, [string]$Root)
@@ -107,8 +112,9 @@ function Copy-Tree {
     foreach ($file in [IO.Directory]::EnumerateFiles($Source, "*", [IO.SearchOption]::AllDirectories)) {
         $extension = [IO.Path]::GetExtension($file).ToLowerInvariant()
         if ([IO.Path]::GetFileName($file).StartsWith(".") -or $extension -in @(".blend", ".blend1", ".blend2", ".psd", ".kra", ".xcf", ".tmp", ".bak", ".log", ".md", ".ps1", ".py")) { continue }
-        if ($ExcludeModelAssets -and $extension -in @(".pim", ".pit", ".pic", ".pis", ".pmd", ".pmg", ".pmc")) { continue }
+        if ($ExcludeModelAssets -and $extension -in @(".pmd", ".pmg", ".pmc")) { continue }
         $relative = $file.Substring($Source.TrimEnd("\").Length).TrimStart("\")
+        if ($ExcludeModelAssets -and $relative -eq "vehicle\trailer_owned\upgrade\rlights\container1.pim") { continue }
         if ($relative.StartsWith(".generated\", [StringComparison]::OrdinalIgnoreCase)) { continue }
         $target = Join-Path $Destination $relative
         [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
@@ -295,6 +301,15 @@ if ($conversionExitCode -ne 0 -or $conversionMessages -match '(?i)(\*\*\* (error
 if (-not [IO.Directory]::Exists($ConvertedCache)) { throw "Conversion output cache was not created: $ConvertedCache" }
 
 Copy-Tree -Source $ConvertedCache -Destination $StageBaseDir
+# These two addon definitions have no PIM/PIT source for their descriptor or
+# geometry, so retain only the exact runtime files they require.
+foreach ($relative in $LegacyRuntimeModels) {
+    $source = Join-Path $BaseDir $relative
+    $target = Join-Path $StageBaseDir $relative
+    if (-not [IO.File]::Exists($source)) { throw "Missing required legacy runtime model: $relative" }
+    [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
+    [IO.File]::Copy($source, $target, $true)
+}
 foreach ($metadata in @("manifest.sii", "mod_description.txt", "mod_description.zh_tw.txt")) {
     $source = Join-Path $StageBaseDir $metadata
     if (-not [IO.File]::Exists($source)) { throw "Missing package metadata: $metadata" }
@@ -315,8 +330,25 @@ foreach ($extension in @("pmd", "pmg", "pmc")) {
     if (-not [IO.File]::Exists((Join-Path $StageBaseDir "vehicle\trailer_owned\tw40ch\chassis.$extension"))) { throw "Conversion did not create chassis.$extension" }
 }
 $packagedModels = @([IO.Directory]::EnumerateFiles($StageBaseDir, "*", [IO.SearchOption]::AllDirectories) | Where-Object { [IO.Path]::GetExtension($_).ToLowerInvariant() -in @(".pmd", ".pmg", ".pmc") } | ForEach-Object { $_.Substring($StageBaseDir.TrimEnd("\").Length).TrimStart("\").Replace("\", "/") } | Sort-Object)
-$expectedModels = @("vehicle/trailer_owned/tw40ch/chassis.pmc", "vehicle/trailer_owned/tw40ch/chassis.pmd", "vehicle/trailer_owned/tw40ch/chassis.pmg")
-if (@(Compare-Object $expectedModels $packagedModels -SyncWindow 0).Count -ne 0) { throw "Package must contain only the three converted V2 chassis model files." }
+$expectedModels = @(
+    "vehicle/trailer_owned/tw40ch/chassis.pmc",
+    "vehicle/trailer_owned/tw40ch/chassis.pmd",
+    "vehicle/trailer_owned/tw40ch/chassis.pmg",
+    "vehicle/trailer_owned/upgrade/reflective/dirt.pmd",
+    "vehicle/trailer_owned/upgrade/reflective/dirt.pmg",
+    "vehicle/trailer_owned/upgrade/rlights/container.pmd",
+    "vehicle/trailer_owned/upgrade/rlights/container.pmg",
+    "vehicle/trailer_owned/upgrade/r_mudflap/container.pmd",
+    "vehicle/trailer_owned/upgrade/r_mudflap/container.pmg",
+    "vehicle/trailer_owned/upgrade/sideskirt/chassis.pmc",
+    "vehicle/trailer_owned/upgrade/sideskirt/chassis.pmd",
+    "vehicle/trailer_owned/upgrade/sideskirt/chassis.pmg",
+    "vehicle/trailer_owned/upgrade/sideskirt/stock.pmd",
+    "vehicle/trailer_owned/upgrade/sideskirt/stock.pmg",
+    "vehicle/truck/upgrade/r_plate/tplate.pmd",
+    "vehicle/truck/upgrade/r_plate/tplate.pmg"
+)
+if (@(Compare-Object @($expectedModels | Sort-Object) $packagedModels -SyncWindow 0).Count -ne 0) { throw "Package model files do not match the converted V2 asset inventory." }
 
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
