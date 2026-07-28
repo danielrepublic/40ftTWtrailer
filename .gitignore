@@ -15,6 +15,12 @@ tools/conversion_tools_2_21/
 # SCS mid-format exports
 *.pim
 *.pit
+*.pic
+
+# Converted SCS assets and packaged builds are reproducible outputs.
+*.pmd
+*.pmg
+*.pmc
 
 # OS files
 Thumbs.db
@@ -24,6 +30,8 @@ Desktop.ini
 # Logs
 *.log
 
-# Reference extracted mod data (large binary assets)
-reference/20ft_unpack/
-reference/mod_extractions/
+# Reference material is local-only, including licensed mod and game extracts.
+reference/
+
+# Blender auto-save files are not source milestones.
+40trailer/source/blender/backups/

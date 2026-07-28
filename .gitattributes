@@ -1,0 +1,1 @@
+40trailer/source/blender/*.blend filter=lfs diff=lfs merge=lfs -text
