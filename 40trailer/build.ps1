@@ -103,28 +103,16 @@ function Reset-Directory {
 }
 
 function Copy-Tree {
-    param([string]$Source, [string]$Destination)
+    param([string]$Source, [string]$Destination, [switch]$ExcludeModelAssets)
     foreach ($file in [IO.Directory]::EnumerateFiles($Source, "*", [IO.SearchOption]::AllDirectories)) {
         $extension = [IO.Path]::GetExtension($file).ToLowerInvariant()
         if ([IO.Path]::GetFileName($file).StartsWith(".") -or $extension -in @(".blend", ".blend1", ".blend2", ".psd", ".kra", ".xcf", ".tmp", ".bak", ".log", ".md", ".ps1", ".py")) { continue }
+        if ($ExcludeModelAssets -and $extension -in @(".pim", ".pit", ".pic", ".pis", ".pmd", ".pmg", ".pmc")) { continue }
         $relative = $file.Substring($Source.TrimEnd("\").Length).TrimStart("\")
         if ($relative.StartsWith(".generated\", [StringComparison]::OrdinalIgnoreCase)) { continue }
         $target = Join-Path $Destination $relative
         [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
         [IO.File]::Copy($file, $target, $true)
-    }
-}
-
-function Copy-PreconvertedAssets {
-    param([string]$Source, [string]$Destination)
-    foreach ($file in [IO.Directory]::EnumerateFiles($Source, "*", [IO.SearchOption]::AllDirectories)) {
-        if ([IO.Path]::GetExtension($file).ToLowerInvariant() -notin @(".pmd", ".pmg", ".pmc")) { continue }
-        $relative = $file.Substring($Source.TrimEnd("\").Length).TrimStart("\")
-        $target = Join-Path $Destination $relative
-        if (-not [IO.File]::Exists($target)) {
-            [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
-            [IO.File]::Copy($file, $target, $false)
-        }
     }
 }
 
@@ -245,30 +233,6 @@ function Write-FileManifest {
     [IO.File]::WriteAllLines($Path, $lines, [Text.UTF8Encoding]::new($false))
 }
 
-function Write-InputManifest {
-    param([string]$Path)
-    $inputs = @([pscustomobject]@{ Root = $BaseDir; Label = "base" })
-    $lines = @(
-        "blend`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $SourceBlend).Hash)",
-        "exporter`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $ExportScript).Hash)",
-        "build_script`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $PSCommandPath).Hash)",
-        "resconvert`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $ResConvert).Hash)"
-    )
-    foreach ($input in $inputs) {
-        foreach ($file in [IO.Directory]::EnumerateFiles($input.Root, "*", [IO.SearchOption]::AllDirectories) | Sort-Object) {
-            $relative = $file.Substring($input.Root.TrimEnd("\").Length).TrimStart("\").Replace("\", "/")
-            if ($input.Label -eq "base" -and $relative.StartsWith(".generated/", [StringComparison]::OrdinalIgnoreCase)) { continue }
-            $lines += "$($input.Label)/$relative`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $file).Hash)"
-        }
-    }
-    $effectRoot = Join-Path $ConversionTools "base\effect"
-    foreach ($name in $RequiredEffectDefinitions + "eut2_interfaces.sui") {
-        $path = if ($name -eq "eut2_interfaces.sui") { Join-Path $effectRoot $name } else { Join-Path (Join-Path $effectRoot "def") $name }
-        $lines += "effect/$name`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash)"
-    }
-    [IO.File]::WriteAllLines($Path, @($lines | Sort-Object), [Text.UTF8Encoding]::new($false))
-}
-
 foreach ($directory in @($BuildDir, $ToolCacheDir, $DistDir)) { [IO.Directory]::CreateDirectory($directory) | Out-Null }
 if ($CleanOnly) {
     Reset-Directory -Path $StageDir -Root $ProjectDir
@@ -315,7 +279,7 @@ if ($mcpExport -match '(?im)(^\s*(error|warning)\s*[-:]|traceback|cancelled)' -o
 Assert-ExportContract -Directory $MidFormatDir
 
 Ensure-EffectResources -GamePath (Get-Ets2Path)
-Copy-Tree -Source $BaseDir -Destination $ConversionMount
+Copy-Tree -Source $BaseDir -Destination $ConversionMount -ExcludeModelAssets
 $conversionAssetDir = Join-Path $ConversionMount "vehicle\trailer_owned\tw40ch"
 [IO.Directory]::CreateDirectory($conversionAssetDir) | Out-Null
 foreach ($extension in @("pim", "pit", "pic")) { [IO.File]::Copy((Join-Path $MidFormatDir "chassis.$extension"), (Join-Path $conversionAssetDir "chassis.$extension"), $true) }
@@ -331,7 +295,6 @@ if ($conversionExitCode -ne 0 -or $conversionMessages -match '(?i)(\*\*\* (error
 if (-not [IO.Directory]::Exists($ConvertedCache)) { throw "Conversion output cache was not created: $ConvertedCache" }
 
 Copy-Tree -Source $ConvertedCache -Destination $StageBaseDir
-Copy-PreconvertedAssets -Source $BaseDir -Destination $StageBaseDir
 foreach ($metadata in @("manifest.sii", "mod_description.txt", "mod_description.zh_tw.txt")) {
     $source = Join-Path $StageBaseDir $metadata
     if (-not [IO.File]::Exists($source)) { throw "Missing package metadata: $metadata" }
@@ -351,6 +314,9 @@ foreach ($section in $ConditionalFiles.Keys) {
 foreach ($extension in @("pmd", "pmg", "pmc")) {
     if (-not [IO.File]::Exists((Join-Path $StageBaseDir "vehicle\trailer_owned\tw40ch\chassis.$extension"))) { throw "Conversion did not create chassis.$extension" }
 }
+$packagedModels = @([IO.Directory]::EnumerateFiles($StageBaseDir, "*", [IO.SearchOption]::AllDirectories) | Where-Object { [IO.Path]::GetExtension($_).ToLowerInvariant() -in @(".pmd", ".pmg", ".pmc") } | ForEach-Object { $_.Substring($StageBaseDir.TrimEnd("\").Length).TrimStart("\").Replace("\", "/") } | Sort-Object)
+$expectedModels = @("vehicle/trailer_owned/tw40ch/chassis.pmc", "vehicle/trailer_owned/tw40ch/chassis.pmd", "vehicle/trailer_owned/tw40ch/chassis.pmg")
+if (@(Compare-Object $expectedModels $packagedModels -SyncWindow 0).Count -ne 0) { throw "Package must contain only the three converted V2 chassis model files." }
 
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -377,9 +343,26 @@ try {
 finally { $zip.Dispose() }
 
 Write-FileManifest -Root $StageDir -Path $ContentManifest
-Write-InputManifest -Path $InputManifest
-if ([IO.File]::Exists($LastInputManifest) -and @((Compare-Object (Get-Content $LastInputManifest) (Get-Content $InputManifest) -SyncWindow 0)).Count -eq 0) {
-    if ([IO.File]::Exists($LastContentManifest) -and @((Compare-Object (Get-Content $LastContentManifest) (Get-Content $ContentManifest) -SyncWindow 0)).Count -ne 0) { throw "Identical build inputs produced a different package content manifest." }
+$inputLines = @(
+    "blend`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $SourceBlend).Hash)",
+    "exporter`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $ExportScript).Hash)",
+    "build_script`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $PSCommandPath).Hash)",
+    "resconvert`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $ResConvert).Hash)"
+)
+foreach ($file in [IO.Directory]::EnumerateFiles($BaseDir, "*", [IO.SearchOption]::AllDirectories) | Sort-Object) {
+    $relative = $file.Substring($BaseDir.TrimEnd("\").Length).TrimStart("\").Replace("\", "/")
+    if ($relative.StartsWith(".generated/", [StringComparison]::OrdinalIgnoreCase)) { continue }
+    $inputLines += "base/$relative`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $file).Hash)"
+}
+$effectRoot = Join-Path $ConversionTools "base\effect"
+foreach ($name in $RequiredEffectDefinitions + "eut2_interfaces.sui") {
+    $path = if ($name -eq "eut2_interfaces.sui") { Join-Path $effectRoot $name } else { Join-Path (Join-Path $effectRoot "def") $name }
+    $inputLines += "effect/$name`t$((Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash)"
+}
+[IO.File]::WriteAllText($InputManifest, ([string]::Join([Environment]::NewLine, [string[]]@($inputLines | Sort-Object)) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+if (-not [IO.File]::Exists($InputManifest)) { throw "Failed to write package input manifest: $InputManifest" }
+if ([IO.File]::Exists($LastInputManifest) -and (Get-FileHash -Algorithm SHA256 -LiteralPath $LastInputManifest).Hash -eq (Get-FileHash -Algorithm SHA256 -LiteralPath $InputManifest).Hash) {
+    if (-not [IO.File]::Exists($LastContentManifest) -or (Get-FileHash -Algorithm SHA256 -LiteralPath $LastContentManifest).Hash -ne (Get-FileHash -Algorithm SHA256 -LiteralPath $ContentManifest).Hash) { throw "Identical build inputs produced a different package content manifest." }
 }
 [IO.File]::Copy($InputManifest, $LastInputManifest, $true)
 [IO.File]::Copy($ContentManifest, $LastContentManifest, $true)
