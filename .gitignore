@@ -1,6 +1,7 @@
 # Build outputs
 40trailer/build/
 40trailer/dist/
+40trailer/base/.generated/
 output/
 
 # Tools (downloaded binaries)

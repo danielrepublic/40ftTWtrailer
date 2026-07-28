@@ -3,7 +3,7 @@ SiiNunit
 trailer_def : trailer_def.tw40ch.container40.single_2_40.container
 {
     gross_trailer_weight_limit: 29000
-    chassis_mass: 3800
+    chassis_mass: 4750
     body_mass: 0
     length: 12.45
     axles: 2

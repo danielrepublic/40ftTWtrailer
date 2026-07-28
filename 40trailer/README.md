@@ -12,9 +12,19 @@
 
 執行建置：
 
+建置需要開啟正式 Blender source，並讓其 BlenderMCP server 監聽 `127.0.0.1:9877`。腳本會驗證連線中的檔案為 `source/blender/tw40ch_chassis.blend`，由該 GUI 匯出，再轉換、封裝並部署到 ETS2 `mod` 目錄。
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\build.ps1
 ```
+
+若 ETS2 不在預設 Steam 安裝位置，可指定遊戲與 mod 目錄：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build.ps1 -Ets2Path 'D:\Steam\steamapps\common\Euro Truck Simulator 2' -ModDirectory 'D:\ETS2\mod'
+```
+
+建置會刪除目標 `mod` 目錄中名稱符合 `tw40*.scs` 的舊 package，再部署 `tw40ch_0.2.0-dev.scs`。它不會修改 ETS2 profile 或 Mod Manager 啟用順序。
 
 只清理本專案建置產物：
 

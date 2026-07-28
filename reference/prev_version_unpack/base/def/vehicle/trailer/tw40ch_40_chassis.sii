@@ -1,9 +1,0 @@
-SiiNunit
-{
-trailer_chassis : tw40ch_40.chassis
-{
-	name: "台式 40 呎雙軸底盤"
-	model: "/vehicle/trailer_owned/tw40ch/chassis.pmd"
-	collision: "/vehicle/trailer_owned/tw40ch/chassis.pmc"
-}
-}

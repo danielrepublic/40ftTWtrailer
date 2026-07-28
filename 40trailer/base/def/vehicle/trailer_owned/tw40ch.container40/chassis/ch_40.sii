@@ -12,7 +12,7 @@ accessory_chassis_data : ch40.tw40ch.container40.chassis
     variant: default
     look: default
 
-    trailer_mass: 3800
+    trailer_mass: 4750
 
     cog_cargo_mass_min: 0.0
     cog_cargo_mass_max: 24000.0
