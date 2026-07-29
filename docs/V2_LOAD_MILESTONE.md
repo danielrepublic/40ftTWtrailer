@@ -40,3 +40,8 @@ This milestone proves that the V2 Taiwan 40 ft skeletal trailer can be built rep
 - Support target: ETS2 `1.60.*`.
 - Verified versions: pending the test matrix.
 - Local test candidate: ETS2 `1.60.1.7`, Steam build `23966373`.
+
+## Dealer Geometry Baseline
+
+- The V2 canonical bare chassis passed a Core-only Dealer visual check on 2026-07-29.
+- The accepted package, root cause, runtime evidence, and remaining scope are recorded in `docs/V2_DEALER_GEOMETRY_MILESTONE.md`.

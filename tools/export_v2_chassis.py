@@ -1,5 +1,6 @@
 """Export the canonical V2 chassis source to SCS mid-format assets."""
 
+import re
 import sys
 from contextlib import redirect_stdout
 from io import StringIO
@@ -7,6 +8,33 @@ from pathlib import Path
 
 import bpy
 from io_scs_tools.utils import get_scs_globals
+
+
+def normalize_uv_aliases(pim_path):
+    """Repair invalid UV aliases emitted by the current SCS Blender exporter."""
+    pim_path = Path(pim_path)
+    text = pim_path.read_text(encoding="utf-8")
+    uv_streams = 0
+
+    def normalize(match):
+        nonlocal uv_streams
+        stream = match.group(0)
+        tag = re.search(r'^        Tag: "_UV(\d+)"$', stream, re.MULTILINE)
+        if tag is None:
+            return stream
+        uv_streams += 1
+        alias = f'_TEXCOORD{tag.group(1)}'
+        stream = re.sub(r"(?m)^        AliasCount: \d+$", "        AliasCount: 1", stream)
+        stream = re.sub(r'(?m)^        Aliases:.*$', f'        Aliases: "{alias}"', stream)
+        return stream
+
+    text = re.sub(r"(?ms)^    Stream \{\n.*?^    \}$", normalize, text)
+    if uv_streams == 0:
+        raise RuntimeError(f"No UV streams found in exported PIM: {pim_path}")
+    if "_TEXCOORD-1" in text:
+        raise RuntimeError(f"Invalid UV aliases remain in exported PIM: {pim_path}")
+    pim_path.write_text(text, encoding="utf-8")
+    return uv_streams
 
 
 def export(base_dir, output_dir, log_path):
@@ -53,6 +81,7 @@ def export(base_dir, output_dir, log_path):
     missing = [str(path) for path in required if not path.is_file()]
     if missing:
         raise RuntimeError(f"SCS export did not produce: {', '.join(missing)}")
+    normalize_uv_aliases(required[0])
 
     return [str(path) for path in required]
 
