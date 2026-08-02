@@ -61,7 +61,6 @@ class Reporter:
         log_path.write_text(result.stdout + result.stderr, encoding="utf-8")
         rejected = reject_pattern is not None and re.search(reject_pattern, result.stdout + result.stderr, re.I)
         failed = result.returncode != 0 or rejected
-        command_failed = failed
         details: dict[str, object] = {
             "returncode": result.returncode,
             "log": str(log_path),
@@ -73,8 +72,7 @@ class Reporter:
                 details.update(validator(result))
             except StageValidationError as error:
                 validation_error = error
-                if not command_failed:
-                    details.update(error.details)
+                details.update(error.details)
                 failed = True
         self.report.stage(name, "failed" if failed else "passed", **details)
         if validation_error is not None:

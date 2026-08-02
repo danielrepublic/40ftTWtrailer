@@ -104,7 +104,7 @@ class ReportingTests(unittest.TestCase):
             self.assertEqual(report["stages"][0]["status"], "failed")
             self.assertEqual(report["stages"][0]["unexpected_warnings"], ["unexpected warning"])
 
-    def test_validator_details_do_not_change_command_failure_fields(self):
+    def test_validator_details_are_combined_with_command_failure_fields(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             reporter = Reporter(root / "logs", root / "build-report.json", root / "build-report.txt", "1.1", "tw40ch_v1.1.scs")
@@ -127,7 +127,7 @@ class ReportingTests(unittest.TestCase):
             self.assertEqual(len(report["stages"]), 1)
             self.assertEqual(report["stages"][0]["status"], "failed")
             self.assertEqual(report["stages"][0]["returncode"], 3)
-            self.assertNotIn("unexpected_warnings", report["stages"][0])
+            self.assertEqual(report["stages"][0]["unexpected_warnings"], ["unexpected warning"])
 
 
 if __name__ == "__main__":
