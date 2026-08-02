@@ -3,8 +3,6 @@
 
 - 可購買與改裝的台式 40 呎雙軸雙胎貨櫃底盤拖車
 - Buyable and customizable Taiwan-style 40ft two-axle, dual-tire container chassis trailer
-- 空車裸底盤，接貨後顯示動態 40 呎貨櫃
-- Bare chassis when empty, dynamic 40ft container when loaded
 - 輪胎選項共 15 組（含尺寸變體）：Trailmaster、Runner、Elemental、Goodyear Fuelmax D Gen2、Goodyear KMAX D Gen2，以及 Michelin X Multiway 3D XDE（315/70、315/80）、X Multi D、X Multi Energy Z、X Multi HD D、X Line Energy D 2、X Line Energy Z、X Line Energy Z 2020、X Multiway 3D XZE（315/70、315/80）
 - 輪胎規格包含 315/70 R22.5 與 315/80 R22.5
 - Tire sizes include 315/70 R22.5 and 315/80 R22.5
