@@ -2,11 +2,31 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from tools.build.chassis_contract import RUNTIME_MODEL_LOCATORS
 from tools.build.contracts import assert_mid_format
 
 
 FIXTURE_PARTS = ("defaultpart", "brace_on", "brace_off", "cables_on", "cables_off")
+FIXTURE_LOCATORS = (
+    "hook",
+    "cargo",
+    "rlights",
+    "r_mudflap",
+    "reflective",
+    "sideskirt",
+    "t_plate",
+    "air_cable_r",
+    "air_cable_y",
+    "ele_cable_b",
+    "ele_cable_w",
+    "larea_s_0",
+    "larea_e_0",
+    "wheel_r_0",
+    "wheel_r_1",
+    "wheel_r_2",
+    "wheel_r_3",
+    "shadow_x_crn",
+    "shadow_x_ori",
+)
 
 
 def part_block(name: str, *, collision: bool = False) -> str:
@@ -14,8 +34,8 @@ def part_block(name: str, *, collision: bool = False) -> str:
     if name == "defaultpart":
         lines.extend(
             [
-                f"    LocatorCount: {len(RUNTIME_MODEL_LOCATORS)}",
-                "    Locators: " + " ".join(str(index) for index, _ in enumerate(RUNTIME_MODEL_LOCATORS)),
+                f"    LocatorCount: {len(FIXTURE_LOCATORS)}",
+                "    Locators: " + " ".join(str(index) for index, _ in enumerate(FIXTURE_LOCATORS)),
             ]
         )
     if collision:
@@ -42,7 +62,7 @@ def pim_text(parts=FIXTURE_PARTS) -> str:
     material = '\n'.join(["Material {", "    Index: 0", '    Alias: "tw40_fakeshadow"', '    Effect: "eut2.fakeshadow"', "}"])
     locators = "\n".join(
         f'Locator {{\n    Name: "{name}"\n    Index: {index}\n}}'
-        for index, name in enumerate(RUNTIME_MODEL_LOCATORS)
+        for index, name in enumerate(FIXTURE_LOCATORS)
     )
     return "\n".join(["PartCount: 5", *(part_block(part) for part in parts), piece, material, locators])
 
