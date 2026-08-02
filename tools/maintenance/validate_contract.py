@@ -350,7 +350,7 @@ def main(expected_source_hash=None, generated=None, conversion_mount=None):
             f"{name} is {actual_position}, expected {expected_position}",
         )
 
-    input_manifest = project / "build" / "last_package_input_manifest.tsv"
+    input_manifest = config.build_dir / "last_package_input_manifest.tsv"
     source_blend = config.source_blend
     if expected_source_hash is not None:
         current_hash = hashlib.sha256(source_blend.read_bytes()).hexdigest().upper()
