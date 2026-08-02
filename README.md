@@ -29,4 +29,4 @@
 
 ## 授權 / License
 
-MIT License。請參閱 [LICENSE](LICENSE) / See [LICENSE](LICENSE).
+See [LICENSE](LICENSE).
