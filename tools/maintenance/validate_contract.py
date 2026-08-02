@@ -18,6 +18,7 @@ from tools.build.chassis_contract import (
     LOADING_AREA_HALF_WIDTH,
     WHEEL_POSITIONS,
 )
+from tools.build.contract_queries import locator_position, locator_y, piece_blocks
 
 
 PROJECT = ROOT / "40trailer"
@@ -63,28 +64,6 @@ def attribute(block, tag):
 def close(actual, expected, tolerance=1e-5):
     return len(actual) == len(expected) and all(
         abs(left - right) <= tolerance for left, right in zip(actual, expected)
-    )
-
-
-def locator_y(text, name):
-    match = re.search(
-        rf'(?ms)Locator \{{\s+Name: "{re.escape(name)}".*?Position: \( &([0-9a-f]+)\s+&([0-9a-f]+)\s+&([0-9a-f]+) \)',
-        text,
-    )
-    if match is None:
-        raise AssertionError(f"missing locator {name}")
-    return struct.unpack(">f", bytes.fromhex(match.group(3)))[0]
-
-
-def locator_position(text, name):
-    match = re.search(
-        rf'(?ms)Locator \{{\s+Name: "{re.escape(name)}".*?Position: \( &([0-9a-f]+)\s+&([0-9a-f]+)\s+&([0-9a-f]+) \)',
-        text,
-    )
-    if match is None:
-        raise AssertionError(f"missing locator {name}")
-    return tuple(
-        struct.unpack(">f", bytes.fromhex(value))[0] for value in match.groups()
     )
 
 
@@ -323,7 +302,7 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
         "kingpin/base plate original gray changed",
     )
 
-    pieces = re.findall(r"(?ms)^Piece \{.*?^\}$", pim)
+    pieces = piece_blocks(pim)
     check(bool(pieces), "generated chassis contains no pieces")
     for index, piece in enumerate(pieces):
         uv = re.search(r'(?ms)^    Stream \{.*?Tag: "_UV0".*?^    \}$', piece)

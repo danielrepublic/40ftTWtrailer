@@ -15,6 +15,7 @@ from .chassis_contract import (
     RUNTIME_MODEL_LOCATORS,
     VEHICLE_REFLECTION_MATERIAL_PATH,
 )
+from .contract_queries import locator_blocks, piece_blocks
 
 
 def _read(path: Path) -> str:
@@ -42,8 +43,8 @@ def assert_mid_format(directory: Path) -> None:
             raise RuntimeError(f"PIT is missing {effect}")
     if f'Value: "{VEHICLE_REFLECTION_MATERIAL_PATH}"' not in pit:
         raise RuntimeError("PIT is missing vehicle_reflection")
-    piece_blocks = re.findall(r"(?ms)^Piece \{.*?^\}$", pim)
-    pieces = len(piece_blocks)
+    pieces_data = piece_blocks(pim)
+    pieces = len(pieces_data)
     positions = len(re.findall(r'Tag: "_POSITION"', pim))
     uv0 = len(re.findall(r'Tag: "_UV0"', pim))
     if pieces == 0 or positions != pieces or uv0 != pieces:
@@ -61,7 +62,7 @@ def assert_mid_format(directory: Path) -> None:
     material_index = fakeshadow_material.group(1)
     shadow_pieces = [
         piece
-        for piece in piece_blocks
+        for piece in pieces_data
         if re.search(rf"(?m)^    Material: {material_index}$", piece)
         and re.search(r"(?m)^    VertexCount: 4$", piece)
         and re.search(r"(?m)^    TriangleCount: 2$", piece)
@@ -84,7 +85,7 @@ def assert_mid_format(directory: Path) -> None:
     )
     if collision_name_count != PIC_COLLISION_LOCATOR_COUNT:
         raise RuntimeError("PIC collision locators do not use the expected SCS name")
-    pic_locators = re.findall(r"(?ms)^Locator \{.*?^\}$", pic)
+    pic_locators = locator_blocks(pic)
     pic_indices = [
         int(match.group(1))
         for block in pic_locators
@@ -139,7 +140,7 @@ def assert_mid_format(directory: Path) -> None:
         or locator_list.group(1).split() != expected_indices
     ):
         raise RuntimeError("PIM runtime Locators do not all belong to defaultpart")
-    pim_locators = re.findall(r"(?ms)^Locator \{.*?^\}$", pim)
+    pim_locators = locator_blocks(pim)
     pim_indices = [
         int(match.group(1))
         for block in pim_locators
