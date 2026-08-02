@@ -23,7 +23,7 @@ class BuildConfigTests(unittest.TestCase):
             config = load(root)
             self.assertEqual(config.vendor_root, (root / "local-vendor").resolve())
 
-    def test_generated_mid_format_is_under_build_directory(self):
+    def test_export_paths_are_separated_from_authored_source(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "VERSION").write_text("1.1\n", encoding="utf-8")
@@ -33,7 +33,7 @@ class BuildConfigTests(unittest.TestCase):
                 (root / "40trailer" / "build" / "mid-format" / "tw40ch").resolve(),
             )
             self.assertEqual(
-                config.legacy_mid_format_dir,
+                config.blender_export_dir,
                 (root / "40trailer" / "base" / ".generated" / "tw40ch").resolve(),
             )
             self.assertEqual(config.tool_cache_dir, (root / "tools" / "vendor" / "tool-cache").resolve())

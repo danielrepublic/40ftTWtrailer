@@ -66,7 +66,7 @@ def clean(config: BuildConfig) -> None:
     reset_directory(config.build_dir, config.project_dir)
     reset_directory(config.mid_format_dir, config.build_dir)
     remove_effect_definition_mount(config)
-    remove_directory(config.legacy_mid_format_dir, config.base_dir)
+    remove_directory(config.blender_export_dir, config.base_dir)
     if config.conversion_tools.is_dir():
         reset_directory(config.conversion_mount, config.conversion_tools)
         reset_directory(config.conversion_output, config.conversion_tools)
@@ -78,11 +78,11 @@ def clean(config: BuildConfig) -> None:
 def collect_blender_export(config: BuildConfig) -> None:
     reset_directory(config.mid_format_dir, config.build_dir)
     for extension in ("pim", "pit", "pic"):
-        source = config.legacy_mid_format_dir / f"chassis.{extension}"
+        source = config.blender_export_dir / f"chassis.{extension}"
         if not source.is_file():
             raise RuntimeError(f"Blender export output is missing: {source}")
         shutil.copy2(source, config.mid_format_dir / source.name)
-    remove_directory(config.legacy_mid_format_dir, config.base_dir)
+    remove_directory(config.blender_export_dir, config.base_dir)
 
 
 def assert_export_log_is_clean(path: Path) -> None:
@@ -145,10 +145,10 @@ def build(config: BuildConfig) -> Path:
         reporter.stage("prepare_workspace", "running")
         removed_dist = remove_matching(config.dist_dir, "tw40*.scs", config.dist_dir)
         removed_mod = remove_matching(config.mod_directory, "tw40*.scs", config.mod_directory)
-        remove_directory(config.legacy_mid_format_dir, config.base_dir)
+        remove_directory(config.blender_export_dir, config.base_dir)
         reset_directory(config.stage_dir, config.project_dir)
         reset_directory(config.mid_format_dir, config.build_dir)
-        reset_directory(config.legacy_mid_format_dir, config.base_dir)
+        reset_directory(config.blender_export_dir, config.base_dir)
         reset_directory(config.reverse_verify_dir, config.build_dir)
         reporter.stage(
             "prepare_workspace",
@@ -171,7 +171,7 @@ def build(config: BuildConfig) -> Path:
         reporter.stage("blender_preflight", "passed")
         export_log = config.logs_dir / "blender_export.log"
         reporter.stage("blender_export", "running")
-        mcp.execute(export_code(config.export_script, config.base_dir, config.legacy_mid_format_dir, export_log))
+        mcp.execute(export_code(config.export_script, config.base_dir, config.blender_export_dir, export_log))
         if not export_log.is_file():
             raise RuntimeError(f"Blender export log is missing: {export_log}")
         assert_export_log_is_clean(export_log)

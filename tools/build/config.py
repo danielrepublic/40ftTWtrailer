@@ -71,7 +71,7 @@ class BuildConfig:
         return self.build_dir / "mid-format" / MOD_ID
 
     @property
-    def legacy_mid_format_dir(self) -> Path:
+    def blender_export_dir(self) -> Path:
         return self.base_dir / ".generated" / MOD_ID
 
     @property

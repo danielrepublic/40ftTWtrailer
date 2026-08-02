@@ -15,7 +15,7 @@ from .reporting import Reporter
 
 SKIP_EXTENSIONS = {".blend", ".blend1", ".blend2", ".psd", ".kra", ".xcf", ".tmp", ".bak", ".log", ".md", ".ps1", ".py"}
 SKIP_MODEL_INPUTS = {"vehicle/trailer_owned/upgrade/rlights/container1.pim"}
-LEGACY_RUNTIME_MODELS = (
+PRESERVED_RUNTIME_MODELS = (
     "vehicle/trailer_owned/upgrade/rlights/container.pmd",
     "vehicle/trailer_owned/upgrade/r_mudflap/container.pmd",
     "vehicle/trailer_owned/upgrade/r_mudflap/container.pmg",
@@ -128,12 +128,12 @@ def prepare_mount(config: BuildConfig) -> None:
     reset_directory(config.conversion_output, config.conversion_tools)
     copy_tree(config.base_dir, config.conversion_mount, exclude_model_assets=True)
 
-    legacy_definitions = config.conversion_mount / "def" / "vehicle" / "trailer"
-    if legacy_definitions.exists():
-        shutil.rmtree(legacy_definitions)
-    legacy_model = config.conversion_mount / "vehicle" / "trailer_owned" / "upgrade" / "sideskirt" / "chassis"
+    stale_trailer_definitions = config.conversion_mount / "def" / "vehicle" / "trailer"
+    if stale_trailer_definitions.exists():
+        shutil.rmtree(stale_trailer_definitions)
+    stale_chassis_model = config.conversion_mount / "vehicle" / "trailer_owned" / "upgrade" / "sideskirt" / "chassis"
     for extension in ("pim", "pit", "pic"):
-        path = legacy_model.with_suffix(f".{extension}")
+        path = stale_chassis_model.with_suffix(f".{extension}")
         if path.exists():
             path.unlink()
     guardrail_holder = config.conversion_mount / "vehicle" / "trailer_owned" / "upgrade" / "sideskirt" / "stock.pim"

@@ -7,7 +7,7 @@ import shutil
 import zipfile
 
 from .config import BuildConfig
-from .conversion import LEGACY_RUNTIME_MODELS, copy_tree
+from .conversion import PRESERVED_RUNTIME_MODELS, copy_tree
 from .paths import remove_matching
 
 
@@ -70,7 +70,7 @@ EXPECTED_SHADOW_FILES = (
 
 def stage(config: BuildConfig) -> None:
     copy_tree(config.converted_cache, config.stage_base_dir)
-    for relative in LEGACY_RUNTIME_MODELS:
+    for relative in PRESERVED_RUNTIME_MODELS:
         source = config.base_dir / relative
         target = config.stage_base_dir / relative
         if not source.is_file():
