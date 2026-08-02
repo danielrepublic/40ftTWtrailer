@@ -87,8 +87,10 @@ class PackageStageTests(unittest.TestCase):
 
             stage(config)
 
-            for name in ("manifest.sii", "mod_description.txt", "mod_description.zh_tw.txt"):
+            metadata = ("manifest.sii", "mod_description.txt", "mod_description.zh_tw.txt")
+            for name in metadata:
                 self.assertTrue((config.stage_dir / name).is_file())
+                self.assertFalse((config.stage_base_dir / name).exists())
             self.assertTrue((config.stage_dir / "mod_icon.jpg").is_file())
             for section, files in CONDITIONAL_PATHS.items():
                 for relative in files:
@@ -98,6 +100,19 @@ class PackageStageTests(unittest.TestCase):
                 self.assertTrue((config.stage_base_dir / relative).is_file())
             for relative in PRESERVED_MODEL_PATHS:
                 self.assertEqual((config.stage_base_dir / relative).read_text(encoding="utf-8"), "preserved")
+
+            expected_files = {
+                *metadata,
+                "mod_icon.jpg",
+                *(f"{section}/{relative}" for section, files in CONDITIONAL_PATHS.items() for relative in files),
+                *(f"base/{relative}" for relative in CONVERTED_MODEL_PATHS + SHADOW_PATHS + PRESERVED_MODEL_PATHS),
+            }
+            actual_files = {
+                path.relative_to(config.stage_dir).as_posix()
+                for path in config.stage_dir.rglob("*")
+                if path.is_file()
+            }
+            self.assertEqual(actual_files, expected_files)
 
 
 if __name__ == "__main__":

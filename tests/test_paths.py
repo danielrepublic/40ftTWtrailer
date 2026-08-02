@@ -26,6 +26,16 @@ class BuildPathTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "outside managed root"):
                 reset_directory(outside, root)
 
+    def test_remove_matching_rejects_directory_outside_managed_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "managed"
+            outside = Path(directory) / "outside"
+            outside.mkdir()
+            (outside / "tw40ch_v1.1.scs").write_text("package", encoding="utf-8")
+
+            with self.assertRaisesRegex(RuntimeError, "outside managed root"):
+                remove_matching(outside, "tw40*.scs", root)
+
 
 if __name__ == "__main__":
     unittest.main()
