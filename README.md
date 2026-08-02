@@ -1,7 +1,4 @@
 # 台式 40 呎貨櫃板台半拖車 / Taiwan 40ft Container Chassis
-
-- 台式雙軸雙胎 40 呎貨櫃板台半拖車模組 / `tw40ch` is a Euro Truck Simulator 2 mod for a Taiwan-style two-axle, dual-tire 40ft container chassis trailer
-
 ### 內容物 / Contents
 
 - 可購買與改裝的台式 40 呎雙軸雙胎貨櫃底盤拖車 / Buyable and customizable Taiwan-style 40ft two-axle, dual-tire container chassis trailer
