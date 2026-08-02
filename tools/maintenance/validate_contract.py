@@ -18,13 +18,10 @@ from tools.build.chassis_contract import (
     LOADING_AREA_HALF_WIDTH,
     WHEEL_POSITIONS,
 )
+from tools.build.config import load
 from tools.build.contract_queries import locator_position, locator_y, piece_blocks
 
 
-PROJECT = ROOT / "40trailer"
-BASE = PROJECT / "base"
-GENERATED = PROJECT / "build" / "mid-format" / "tw40ch"
-CONVERSION_MOUNT = ROOT / "tools" / "vendor" / "conversion_tools" / "tw40ch"
 TARGET_GRAY = 105 / 255
 LEAF_SPRING_COLOR = (98 / 255, 91 / 255, 87 / 255)
 PLATE_SOURCE_SHA256 = "E75495242718E5F0AA5906788D4E0DDC75DC0DAC95E32120F9B6F097CE78EC49"
@@ -67,16 +64,21 @@ def close(actual, expected, tolerance=1e-5):
     )
 
 
-def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVERSION_MOUNT):
+def main(expected_source_hash=None, generated=None, conversion_mount=None):
+    config = load(ROOT)
+    project = config.project_dir
+    base = config.base_dir
+    generated = generated or config.mid_format_dir
+    conversion_mount = conversion_mount or config.conversion_mount
     failures = []
 
     def check(condition, message):
         if not condition:
             failures.append(message)
 
-    manifest = read(BASE / "manifest.sii")
+    manifest = read(base / "manifest.sii")
     body = read(
-        BASE
+        base
         / "def"
         / "vehicle"
         / "trailer_owned"
@@ -85,10 +87,10 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
         / "cont_40.sii"
     )
     trailer_data = read(
-        BASE / "def" / "vehicle" / "trailer_owned" / "tw40ch.container40" / "data.sii"
+        base / "def" / "vehicle" / "trailer_owned" / "tw40ch.container40" / "data.sii"
     )
     plate_dir = (
-        BASE
+        base
         / "def"
         / "vehicle"
         / "trailer_owned"
@@ -98,12 +100,12 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
     )
     plate_1 = read(plate_dir / "1.sii")
     plate_2 = read(plate_dir / "2.sii")
-    desktop = read(BASE / "def" / "vehicle" / "trailer_desktop" / "tw40ch_40.sii")
+    desktop = read(base / "def" / "vehicle" / "trailer_desktop" / "tw40ch_40.sii")
     dealer = read(
-        BASE / "def" / "vehicle" / "trailer_dealer" / "tw40ch" / "tw40ch_40.sii"
+        base / "def" / "vehicle" / "trailer_dealer" / "tw40ch" / "tw40ch_40.sii"
     )
     trailer_type_icon = read(
-        BASE
+        base
         / "material"
         / "ui"
         / "accessory"
@@ -111,7 +113,7 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
         / "tw40ch_container40.mat"
     )
     chassis = read(
-        BASE
+        base
         / "def"
         / "vehicle"
         / "trailer_owned"
@@ -119,8 +121,8 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
         / "chassis"
         / "ch_40.sii"
     )
-    shadow_tobj_path = BASE / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.tobj"
-    shadow_dds_path = BASE / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.dds"
+    shadow_tobj_path = base / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.tobj"
+    shadow_dds_path = base / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.dds"
     shadow_tobj = read(shadow_tobj_path) if shadow_tobj_path.is_file() else ""
     shadow_dds = shadow_dds_path.read_bytes() if shadow_dds_path.is_file() else b""
     holder_root = conversion_mount
@@ -135,7 +137,7 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
     pit = read(generated / "chassis.pit")
     pim = read(generated / "chassis.pim")
 
-    version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+    version = config.version
     check(f'package_version: "{version}"' in manifest, f"manifest version is not {version}")
     check('shadow_texture: "/vehicle/trailer_owned/tw40ch/shadow.tobj"' in chassis, "chassis does not configure the chassis shadow texture")
     check('extended_shadow_texture: "/vehicle/trailer_owned/tw40ch/shadow.tobj"' in chassis, "chassis does not configure the extended shadow texture")
@@ -143,8 +145,8 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
         'ui_shadow: "/vehicle/trailer_owned/scs_gooseneck/chassis/shadow_40ft.pmd"' in chassis,
         "chassis does not configure the 40ft dealer UI shadow model",
     )
-    check((BASE / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.dds").is_file(), "extended shadow DDS is missing")
-    check((BASE / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.tobj").is_file(), "extended shadow TOBJ is missing")
+    check((base / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.dds").is_file(), "extended shadow DDS is missing")
+    check((base / "vehicle" / "trailer_owned" / "tw40ch" / "shadow.tobj").is_file(), "extended shadow TOBJ is missing")
     check("map\t2d\tshadow.dds" in shadow_tobj, "shadow TOBJ does not target shadow.dds")
     check("color_space\tlinear" in shadow_tobj, "shadow TOBJ is not linear color space")
     if shadow_dds:
@@ -187,7 +189,7 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
     )
     check(
         not (
-            BASE
+            base
             / "material"
             / "ui"
             / "accessory"
@@ -204,7 +206,7 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
         ROOT / "reference" / "40ft_photos" / "4e06be898a04454ea3f9794eeee0e1fa.jpg"
     )
     configurator_icon = (
-        BASE
+        base
         / "material"
         / "ui"
         / "accessory"
@@ -235,8 +237,8 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
                 struct.unpack("<I", icon_bytes[88:92])[0] == 32,
                 "configurator DDS is not a 32-bit texture",
             )
-    plate_texture = BASE / "vehicle" / "truck" / "upgrade" / "r_plate" / "2.dds"
-    plate_source = PROJECT / "source" / "textures" / "t_plate_75-YG.png"
+    plate_texture = base / "vehicle" / "truck" / "upgrade" / "r_plate" / "2.dds"
+    plate_source = project / "source" / "textures" / "t_plate_75-YG.png"
     check(plate_texture.is_file(), "75-YG DDS is missing")
     check(plate_source.is_file(), "75-YG source PNG is missing")
     if plate_source.is_file():
@@ -348,8 +350,8 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
             f"{name} is {actual_position}, expected {expected_position}",
         )
 
-    input_manifest = PROJECT / "build" / "last_package_input_manifest.tsv"
-    source_blend = PROJECT / "source" / "blender" / "tw40ch_chassis.blend"
+    input_manifest = project / "build" / "last_package_input_manifest.tsv"
+    source_blend = config.source_blend
     if expected_source_hash is not None:
         current_hash = hashlib.sha256(source_blend.read_bytes()).hexdigest().upper()
         check(
@@ -381,7 +383,7 @@ def main(expected_source_hash=None, generated=GENERATED, conversion_mount=CONVER
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Validate the tw40ch source and generated asset contract")
     parser.add_argument("expected_source_hash", nargs="?")
-    parser.add_argument("--generated-dir", type=Path, default=GENERATED)
-    parser.add_argument("--conversion-mount", type=Path, default=CONVERSION_MOUNT)
+    parser.add_argument("--generated-dir", type=Path)
+    parser.add_argument("--conversion-mount", type=Path)
     args = parser.parse_args()
     sys.exit(main(args.expected_source_hash, args.generated_dir, args.conversion_mount))
