@@ -32,26 +32,9 @@
 3. 在 Mod Manager 啟用模組 / Enable it in Mod Manager
 4. 在車商選擇 `台式 40 呎雙軸` / Select `台式 40 呎雙軸` at the trailer dealer
 
-## 開發者 / Developer
+### 版本記錄 / Changelog
 
-- Canonical source：`40trailer/source/blender/tw40ch_chassis.blend` / Canonical source: `40trailer/source/blender/tw40ch_chassis.blend`
-- Runtime 路徑維持 `/vehicle/trailer_owned/tw40ch/chassis.*` / Runtime paths remain `/vehicle/trailer_owned/tw40ch/chassis.*`
-
-### 快速建置 / Quick Build
-
-```powershell
-.\setup.ps1
-.\setup.ps1 -InstallVendorTools
-powershell -ExecutionPolicy Bypass -File .\40trailer\build.ps1
-```
-
-### 文件 / Documentation
-
-- [建置指南 / Build Guide](docs/BUILD.md)
-- [模型命名 v1.1 / Model Naming v1.1](docs/MODEL_NAMING_V1_1.md)
-- [Agent 工作流程 / Agent Workflow](docs/agents/workflow.md)
-- [領域背景 / Domain Context](CONTEXT.md)
-- [變更記錄 / Changelog](CHANGELOG.md)
+- [版本變更 / Release history](CHANGELOG.md)
 
 ## 授權 / License
 
