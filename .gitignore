@@ -4,10 +4,16 @@
 40trailer/base/.generated/
 output/
 
+# Local Python/build environment
+.venv/
+build.config.json
+tools/vendor/
+__pycache__/
+*.py[cod]
+
 # Tools (downloaded binaries)
 tools/downloads/
-tools/scs_extractor_1_55/
-tools/conversion_tools_2_21/
+tools/converter_pix.exe
 
 # Blender temp files
 *.blend1
@@ -36,3 +42,6 @@ reference/
 
 # Blender auto-save files are not source milestones.
 40trailer/source/blender/backups/
+
+# Archived historical files (not active source)
+.archive/

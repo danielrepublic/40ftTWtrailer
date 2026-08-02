@@ -1,7 +1,5 @@
-﻿[normal]台式 40 呎雙軸貨櫃骨架半拖車。
+﻿[normal]台式 40 呎雙軸貨櫃骨架半拖車。雙軸雙胎、動態貨櫃、完整配件改裝。
 
-[orange]目前版本：[normal]經銷商修正版 0.1.1-dev
+[orange]版本：[normal]1.1
 
-本版本提供第一個可購買拖車的開發測試版；貨物工作與正式材質仍在開發中。
-
-[orange]必要模組：[normal]SCS Wheels REWORK V2（Steam Workshop 3015167743）；未啟用時 315/60 Goodyear KMAX 輪胎資產不存在。
+[orange]建議模組（可選）：[normal]SCS Wheels REWORK V2（Steam Workshop 3015167743）提供更佳的輪圈與輪胎視覺效果。

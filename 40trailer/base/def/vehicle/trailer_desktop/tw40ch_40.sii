@@ -113,7 +113,7 @@ vehicle_addon_accessory: .reflective
 
 vehicle_addon_accessory: .t_plate
 {
-	data_path: "/def/vehicle/trailer_owned/tw40ch.container40/accessory/t_plate/1.sii"
+	data_path: "/def/vehicle/trailer_owned/tw40ch.container40/accessory/t_plate/2.sii"
 }
 
 }

@@ -9,6 +9,12 @@ accessory_chassis_data : ch40.tw40ch.container40.chassis
 
     model: "/vehicle/trailer_owned/tw40ch/chassis.pmd"
     collision: "/vehicle/trailer_owned/tw40ch/chassis.pmc"
+    shadow_texture: "/vehicle/trailer_owned/tw40ch/shadow.tobj"
+    extended_shadow_texture: "/vehicle/trailer_owned/tw40ch/shadow.tobj"
+    extended_shadow_intensity: 1.0
+    extended_shadow_fadeout_start: 10.0
+    extended_shadow_fadeout_length: 5.0
+    ui_shadow: "/vehicle/trailer_owned/scs_gooseneck/chassis/shadow_40ft.pmd"
     variant: default
     look: default
 

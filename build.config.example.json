@@ -1,0 +1,11 @@
+{
+  "ets2_path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Euro Truck Simulator 2",
+  "mod_directory": "%USERPROFILE%\\Documents\\Euro Truck Simulator 2\\mod",
+  "blender_host": "127.0.0.1",
+  "blender_port": 9876,
+  "vendor_root": "tools/vendor",
+  "conversion_tools": "tools/vendor/conversion_tools",
+  "extractor": "tools/vendor/scs_extractor/scs_extractor.exe",
+  "converter_pix": "tools/vendor/converter_pix.exe",
+  "resconvert": "tools/vendor/conversion_tools/bin/win_x64/tools/resconvert.exe"
+}

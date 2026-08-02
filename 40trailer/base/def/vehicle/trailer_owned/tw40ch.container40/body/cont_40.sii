@@ -12,6 +12,7 @@ accessory_trailer_body_data : cont40.tw40ch.container40.body
     volume: 80
     body_type: container
     cargo_loading_methods[]: area_cont_40ft
+    cargo_regular_width: 2.5
     cargo_areas[]: (2.44, 12.18)
     mass: 0
 }

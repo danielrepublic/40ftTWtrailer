@@ -1,5 +1,12 @@
-material : "ui"
-{
-	texture : "tw40ch_container40.tobj"
-	texture_name : "texture"
+effect : "ui.sdf.rfx" {
+	aux[0] : { 68.00000, 68.00000, 2.00000, 0.00000 }
+	aux[1] : { 0.38133, 0.38133, 0.38133, 1.00000 }
+	aux[2] : { 0.00000, 0.00000, 0.00000, 0.00000 }
+	aux[3] : { 0.00000, 0.00000, 0.00000, 0.00000 }
+	aux[4] : { 0.00000, 0.00000, 0.00000, 0.00000 }
+	texture : "texture" {
+		source : "/material/ui/cargo.tobj"
+		u_address : clamp
+		v_address : clamp
+	}
 }

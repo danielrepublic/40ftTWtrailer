@@ -13,7 +13,7 @@ accessory_trailer_data : vehicle.tw40ch.container40
 	fallback[]: "rlights|container.sii"
 	fallback[]: "r_mudflap|stock.sii"
 	fallback[]: "sideskirt|stock.sii"
-	fallback[]: "t_plate|1.sii"
+	fallback[]: "t_plate|2.sii"
 	fallback[]: "reflective|red.sii"
 
     require[]: chassis
