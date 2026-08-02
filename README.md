@@ -2,8 +2,6 @@
 
 - 台式雙軸雙胎 40 呎貨櫃板台半拖車模組 / `tw40ch` is a Euro Truck Simulator 2 mod for a Taiwan-style two-axle, dual-tire 40ft container chassis trailer
 
-## 使用者 / User
-
 ### 內容物 / Contents
 
 - 可購買與改裝的台式 40 呎雙軸雙胎貨櫃底盤拖車 / Buyable and customizable Taiwan-style 40ft two-axle, dual-tire container chassis trailer
@@ -13,10 +11,6 @@
 - 輪圈、輪轂、螺帽、尾燈、牌照、擋泥板、反光條、側裙與後保桿配件 / Rim, hub, nut, tail-light, license-plate, mudflap, reflective-strip, sideskirt, and rear-bumper accessories
 - Freight Market 與 Cargo Market / Freight Market and Cargo Market support
 - 素色、金屬色與自訂車架塗裝 / Solid, metallic, and custom chassis paint options
-
-### 已知限制 / Known Limitations
-
-- ETS2 實際遊戲中的車架 shadow 尚未顯示 / The chassis shadow is not yet visible in live ETS2 gameplay
 
 ### 相容性 / Compatibility
 
