@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 
-from tools.build.reporting import Reporter
+from tools.build.reporting import Reporter, StageValidationError
 
 
 class ReportingTests(unittest.TestCase):
@@ -44,13 +44,13 @@ class ReportingTests(unittest.TestCase):
             self.assertEqual(report["stages"][0]["status"], "failed")
             self.assertEqual(report["stages"][0]["error"], "MCP unavailable")
 
-    def test_command_rejects_warning_text(self):
+    def test_run_stage_rejects_warning_text(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             reporter = Reporter(root / "logs", root / "build-report.json", root / "build-report.txt", "1.1", "tw40ch_v1.1.scs")
             reporter.start()
             with self.assertRaises(RuntimeError):
-                reporter.command(
+                reporter.run_stage(
                     "reverse_verify",
                     [sys.executable, "-c", "print('warning: test')"],
                     root,
@@ -59,6 +59,50 @@ class ReportingTests(unittest.TestCase):
             reporter.finish("failed", error="warning")
             report = json.loads((root / "build-report.json").read_text(encoding="utf-8"))
             self.assertEqual(report["stages"][0]["status"], "failed")
+
+    def test_validator_details_are_recorded_on_one_stage(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            reporter = Reporter(root / "logs", root / "build-report.json", root / "build-report.txt", "1.1", "tw40ch_v1.1.scs")
+            reporter.start()
+
+            def validate(_result):
+                return {"accepted_warnings": ["accepted warning"]}
+
+            reporter.run_stage(
+                "reverse_verify",
+                [sys.executable, "-c", "print('warning: accepted')"],
+                root,
+                validator=validate,
+            )
+            reporter.finish("success")
+
+            report = json.loads((root / "build-report.json").read_text(encoding="utf-8"))
+            self.assertEqual(len(report["stages"]), 1)
+            self.assertEqual(report["stages"][0]["accepted_warnings"], ["accepted warning"])
+
+    def test_validator_failure_is_recorded_once(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            reporter = Reporter(root / "logs", root / "build-report.json", root / "build-report.txt", "1.1", "tw40ch_v1.1.scs")
+            reporter.start()
+
+            def validate(_result):
+                raise StageValidationError("invalid reverse verification", unexpected_warnings=["unexpected warning"])
+
+            with self.assertRaises(StageValidationError):
+                reporter.run_stage(
+                    "reverse_verify",
+                    [sys.executable, "-c", "print('warning: unexpected')"],
+                    root,
+                    validator=validate,
+                )
+            reporter.finish("failed", error="invalid reverse verification")
+
+            report = json.loads((root / "build-report.json").read_text(encoding="utf-8"))
+            self.assertEqual(len(report["stages"]), 1)
+            self.assertEqual(report["stages"][0]["status"], "failed")
+            self.assertEqual(report["stages"][0]["unexpected_warnings"], ["unexpected warning"])
 
 
 if __name__ == "__main__":

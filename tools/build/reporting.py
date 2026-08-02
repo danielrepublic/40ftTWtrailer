@@ -8,7 +8,13 @@ from pathlib import Path
 import re
 import subprocess
 import time
-from typing import Sequence
+from typing import Callable, Mapping, Sequence
+
+
+class StageValidationError(RuntimeError):
+    def __init__(self, message: str, **details: object):
+        super().__init__(message)
+        self.details = details
 
 
 @dataclass
@@ -39,7 +45,7 @@ class Reporter:
     def stage(self, name: str, status: str, **details) -> None:
         self.report.stage(name, status, **details)
 
-    def command(
+    def run_stage(
         self,
         name: str,
         command: Sequence[str],
@@ -47,6 +53,7 @@ class Reporter:
         *,
         check: bool = True,
         reject_pattern: str | None = None,
+        validator: Callable[[subprocess.CompletedProcess[str]], Mapping[str, object]] | None = None,
     ) -> subprocess.CompletedProcess[str]:
         started = time.monotonic()
         result = subprocess.run(command, cwd=cwd, text=True, capture_output=True)
@@ -54,7 +61,22 @@ class Reporter:
         log_path.write_text(result.stdout + result.stderr, encoding="utf-8")
         rejected = reject_pattern is not None and re.search(reject_pattern, result.stdout + result.stderr, re.I)
         failed = result.returncode != 0 or rejected
-        self.report.stage(name, "failed" if failed else "passed", returncode=result.returncode, log=str(log_path), seconds=round(time.monotonic() - started, 3))
+        details: dict[str, object] = {
+            "returncode": result.returncode,
+            "log": str(log_path),
+            "seconds": round(time.monotonic() - started, 3),
+        }
+        validation_error: StageValidationError | None = None
+        if validator is not None:
+            try:
+                details.update(validator(result))
+            except StageValidationError as error:
+                validation_error = error
+                details.update(error.details)
+                failed = True
+        self.report.stage(name, "failed" if failed else "passed", **details)
+        if validation_error is not None:
+            raise validation_error
         if check and failed:
             raise RuntimeError(f"{name} failed with exit code {result.returncode}; see {log_path}")
         return result

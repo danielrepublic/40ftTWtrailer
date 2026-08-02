@@ -15,7 +15,7 @@ from .contracts import assert_mid_format
 from .conversion import convert, ensure_effect_resources, migrate_tool_cache, prepare_mount, remove_effect_definition_mount
 from .package import create_archive, deploy, stage
 from .paths import remove_directory, remove_matching, reset_directory
-from .reporting import Reporter
+from .reporting import Reporter, StageValidationError
 
 
 REVERSE_VERIFY_ALLOWED_WARNINGS = (
@@ -99,7 +99,7 @@ def assert_export_log_is_clean(path: Path) -> None:
         raise RuntimeError(f"Blender export did not report success; see {path}")
 
 
-def validate_reverse_verify(result, reporter: Reporter) -> None:
+def validate_reverse_verify(result) -> dict[str, list[str]]:
     text = result.stdout + result.stderr
     warning_lines = [
         line.strip()
@@ -113,10 +113,8 @@ def validate_reverse_verify(result, reporter: Reporter) -> None:
     ]
     fatal = re.search(r"\*\*\*\s*ERROR\s*\*\*\*|<error>", text, re.I)
     if result.returncode != 0 or fatal or unexpected:
-        reporter.stage("reverse_verify", "failed", unexpected_warnings=unexpected)
-        raise RuntimeError("reverse_verify failed or emitted an unapproved warning")
-    if warning_lines:
-        reporter.stage("reverse_verify", "passed", accepted_warnings=warning_lines)
+        raise StageValidationError("reverse_verify failed or emitted an unapproved warning", unexpected_warnings=unexpected)
+    return {"accepted_warnings": warning_lines} if warning_lines else {}
 
 
 def validate_external_inputs(config: BuildConfig) -> None:
@@ -190,14 +188,14 @@ def build(config: BuildConfig) -> Path:
         reporter.stage("package_stage", "running")
         stage(config)
         reporter.stage("package_stage", "passed")
-        reverse_result = reporter.command(
+        reporter.run_stage(
             "reverse_verify",
             [str(config.converter_pix), "-b", str(config.stage_base_dir), "-e", str(config.reverse_verify_dir), "-m", "/vehicle/trailer_owned/tw40ch/chassis"],
             config.root,
             check=False,
+            validator=validate_reverse_verify,
         )
-        validate_reverse_verify(reverse_result, reporter)
-        reporter.command(
+        reporter.run_stage(
             "source_contract",
             [
                 sys.executable,

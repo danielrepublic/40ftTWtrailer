@@ -42,7 +42,7 @@ def copy_tree(source: Path, destination: Path, *, exclude_model_assets: bool = F
 
 
 def _run_tool(reporter: Reporter, name: str, command: list[str], cwd: Path) -> None:
-    result = reporter.command(name, command, cwd, check=False, reject_pattern=r"\b(error|warning)\b")
+    result = reporter.run_stage(name, command, cwd, check=False, reject_pattern=r"\b(error|warning)\b")
     if result.returncode != 0 or re.search(r"\b(error|warning)\b", result.stdout + result.stderr, re.I):
         raise RuntimeError(f"{name} failed or emitted a warning; see {reporter.logs_dir / (name + '.log')}")
 
