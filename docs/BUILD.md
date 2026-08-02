@@ -10,6 +10,9 @@
 - SCS Game Archive Extractor 1.55 and ConverterPIX
 - ETS2 1.60.1.7 for effect resources and later gameplay validation
 
+The ignored `reference/` tree is for human research and model authoring only. It
+is not a build input; normal builds must remain valid when that tree is absent.
+
 Conversion Tools 2.21 is the latest official version listed by the SCS Modding
 Wiki for the target game range. Do not replace it with an unverified build.
 

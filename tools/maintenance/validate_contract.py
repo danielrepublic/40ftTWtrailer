@@ -26,7 +26,6 @@ TARGET_GRAY = 105 / 255
 LEAF_SPRING_COLOR = (98 / 255, 91 / 255, 87 / 255)
 PLATE_SOURCE_SHA256 = "E75495242718E5F0AA5906788D4E0DDC75DC0DAC95E32120F9B6F097CE78EC49"
 PLATE_DDS_SHA256 = "4EB3717215D5162C49003AFF92F87E6BFB6DA3A9A0F148B8ACF95C1C3354D81C"
-CONFIGURATOR_REFERENCE_SHA256 = "4F616044F7788F12FC437313A1B47E65CEC508DDAF93271394999210855CB1CE"
 CONFIGURATOR_ICON_DDS_SHA256 = "D58557EC3BABF2D6390E56B0E4E0478ED03777086D065B17248BEEBE5D878154"
 
 
@@ -202,9 +201,6 @@ def main(expected_source_hash=None, generated=None, conversion_mount=None):
         'icon: "body/tw_container/body"' in chassis,
         "vehicle configurator chassis does not use the reference-photo icon",
     )
-    configurator_reference = (
-        ROOT / "reference" / "40ft_photos" / "4e06be898a04454ea3f9794eeee0e1fa.jpg"
-    )
     configurator_icon = (
         base
         / "material"
@@ -214,14 +210,7 @@ def main(expected_source_hash=None, generated=None, conversion_mount=None):
         / "tw_container"
         / "body.dds"
     )
-    check(configurator_reference.is_file(), "configurator reference photo is missing")
-    check(configurator_icon.is_file(), "configurator reference-photo DDS is missing")
-    if configurator_reference.is_file():
-        check(
-            hashlib.sha256(configurator_reference.read_bytes()).hexdigest().upper()
-            == CONFIGURATOR_REFERENCE_SHA256,
-            "configurator reference photo changed without updating the icon contract",
-        )
+    check(configurator_icon.is_file(), "configurator icon DDS is missing")
     if configurator_icon.is_file():
         icon_bytes = configurator_icon.read_bytes()
         check(
